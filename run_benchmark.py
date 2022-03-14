@@ -23,8 +23,6 @@ from benchmark_langid import BenchmarkLangid
 
 
 
-# DO NOT DELETE
-#langid_df[(langid_df.ismatch==False) & (langid_df.pred_lang == "en") & (langid_df.language == "hi")].shape
 
 if __name__ == '__main__':
 
