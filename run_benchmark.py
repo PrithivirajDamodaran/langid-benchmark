@@ -19,6 +19,7 @@ logger.addHandler(stdout_handler)
 
 
 from benchmark_langid import BenchmarkLangid
+from benchmark_fasttext import BenchmarkFasttext
 ### ADD YOUR IMPLEMENTATIONS HERE ###
 
 
@@ -45,6 +46,9 @@ if __name__ == '__main__':
     if "Langid" in algorithm_list or "*" in algorithm_list:
         benchmark_langid = BenchmarkLangid()
         benchmark_langid()
+    if "Fasttext" in algorithm_list or "*" in algorithm_list:
+        benchmark_fasttext = BenchmarkFasttext()
+        benchmark_fasttext()
 
     ### ADD YOUR IMPLEMENTATIONS HERE ###        
 
