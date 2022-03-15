@@ -35,7 +35,7 @@ class BenchmarkLangid():
       def __call__(self):
           """ detects language for all the texts and calculates benchmark """
           logger.info('Benchmark for Langid started ...')
-          langid_df = pd.read_csv("./dataset.csv")  
+          langid_df = pd.read_csv("data/dataset.csv")  
           langid_df['language'] = langid_df['language'].apply(lambda x:lang_dict[x])
           langid_df[['pred_lang', 'time_taken', 'ismatch']] = langid_df.progress_apply(self._detect_language ,axis=1)
           time_taken = langid_df["time_taken"].to_list()
@@ -51,7 +51,7 @@ class BenchmarkLangid():
                "accuracy":correct_predictions/ total_predictions
                }
           summary_langid_df = pd.DataFrame([d]) 
-          langid_df.to_csv("./predictions_langid.csv", index = False)
-          summary_langid_df.to_csv("./benchmark_langid.csv", index = False)
+          langid_df.to_csv("data/predictions_langid.csv", index = False)
+          summary_langid_df.to_csv("data/benchmark_langid.csv", index = False)
           logger.info('Benchmark for Langid ended ...')
           logger.info('See benchmark_langid.csv and predictions_langid.csv files...')

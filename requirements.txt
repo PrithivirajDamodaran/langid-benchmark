@@ -1,1 +1,5 @@
+fasttext
+pandas
 py3langid
+requests
+tqdm
