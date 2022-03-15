@@ -10,12 +10,14 @@ A benchmark of off-the-shelf models that detects language in text - Contribution
   - 22K records
   - There is a known issue 17 of the GT labels are wrong, but it is negligible.
 
+### Dataset EDA
+- TBD
 
 ### How contribute?
 - Add a new class for each algorithm implementation, use benchmark_langid.py as reference.
 - Reuse the Language Dictionary
 - Follow the csv file formats for results so it will be easy to collate later.
-- Memory usage for each algorithm is a custom logic.
+- Use psutil resident set size (RSS) for memory usage during load + dummy predict (see usage examples in any of the algorithms)
 - Please submit a PR so we can follow the review process.
 - Collaborators can serve as peer reviewers.
 
