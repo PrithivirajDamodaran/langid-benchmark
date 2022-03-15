@@ -1,3 +1,5 @@
+import psutil
+import os
 import fasttext
 import requests
 import time
@@ -7,7 +9,6 @@ import sys
 import os
 import pandas as pd 
 from language_dictionary import lang_dict
-from object_size import getsize
 from tqdm.auto import tqdm
 pd.set_option("max_colwidth", None)
 tqdm.pandas()
