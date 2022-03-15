@@ -25,6 +25,8 @@ class BenchmarkFasttext():
         base_url = 'https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176'
 
         self.models = {}
+        self.mem_usage = {}
+        p = psutil.Process(os.getpid())
         for ext in ['ftz', 'bin']:
             fname = f'models/lid.176.{ext}'
             if not os.path.isfile(fname): 
@@ -33,7 +35,11 @@ class BenchmarkFasttext():
                 open(fname, 'wb').write(response.content)
 
             logger.info(f'Loading the fastext {ext} model')
+            mem_before = p.memory_info().rss
             self.models[ext] = fasttext.load_model(fname)
+            self.models[ext].predict("Hello World")
+            mem_after = p.memory_info().rss
+            self.mem_usage[ext] = mem_after - mem_before
 
         logger.info('Fasttext models loaded ...')
 
@@ -50,7 +56,7 @@ class BenchmarkFasttext():
 
     def __call__(self):
         """ detects language for all the texts and calculates benchmark """
-        
+        MB = 1024 * 1024
         df = pd.read_csv("data/dataset.csv")
         df['language'] = df['language'].apply(lambda x:lang_dict[x])
 
@@ -67,7 +73,7 @@ class BenchmarkFasttext():
                 "max": np.max(time_taken),
                 "min": np.min(time_taken),
                 "median": np.median(time_taken),
-                "mem": f'{str(round(getsize(self.models[ext]) / math.pow(10,6),2))} mb',
+                "mem": f'{str(round(self.mem_usage[ext] / MB,2))} mb',
                 "accuracy": correct_predictions / total_predictions,
             }
 
