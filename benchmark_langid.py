@@ -6,6 +6,7 @@ import math
 import numpy as np
 import sys
 import pandas as pd 
+from language_dictionary import lang_dict
 from tqdm.auto import tqdm
 pd.set_option("max_colwidth", None)
 tqdm.pandas()
