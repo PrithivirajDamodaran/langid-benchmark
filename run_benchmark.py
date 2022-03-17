@@ -2,6 +2,8 @@ import argparse
 from argparse import ArgumentParser
 import logging
 import logging.config
+from mdtable import MDTable
+import pandas as pd
 import sys
 
 logging.config.dictConfig({
@@ -43,13 +45,30 @@ if __name__ == '__main__':
 
     logger.info('Benchmarking started.....')
     
+    summary_df_list = []
     if "Langid" in algorithm_list or "*" in algorithm_list:
         benchmark_langid = BenchmarkLangid()
-        benchmark_langid()
+        summary_df_list.extend(benchmark_langid())
     if "Fasttext" in algorithm_list or "*" in algorithm_list:
         benchmark_fasttext = BenchmarkFasttext()
-        benchmark_fasttext()
+        summary_df_list.extend(benchmark_fasttext())
+
+    summary_df = pd.concat(summary_df_list)
+    summary_df.to_csv("data/benchmark_results.csv", index=False, float_format='%.4f')        
 
     ### ADD YOUR IMPLEMENTATIONS HERE ###        
+    
+
+    logger.info('Writing Results')
+    markdown = MDTable('data/benchmark_results.csv')
+    markdown_string_table = markdown.get_table()
+
+    with open('README.md', 'r') as f:
+        file_content = f.read()
+
+    new_file_content = file_content.split('### Results\n')[0] + '### Results\n' + markdown_string_table
+
+    with open('README.md', 'w') as f:
+        print(new_file_content, file=f)
 
     logger.info('Benchmarking ended.....')

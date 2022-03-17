@@ -12,6 +12,8 @@ from language_dictionary import lang_dict
 from tqdm.auto import tqdm
 pd.set_option("max_colwidth", None)
 tqdm.pandas()
+from typing import List
+
 import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -55,12 +57,13 @@ class BenchmarkFasttext():
         match = gt == pred      
         return pd.Series([pred, end, match])
 
-    def __call__(self):
+    def __call__(self) -> List[pd.DataFrame]:
         """ detects language for all the texts and calculates benchmark """
         MB = 1024 * 1024
         df = pd.read_csv("data/dataset.csv")
         df['language'] = df['language'].apply(lambda x:lang_dict[x])
 
+        summary_df_list = []
         for ext in ['ftz', 'bin']:
             logger.info(f'Benchmark for Fasttext {ext} started ...')
             df[['pred_lang', 'time_taken', 'ismatch']] = df.progress_apply(self._detect_language, model=self.models[ext], axis=1)
@@ -77,10 +80,12 @@ class BenchmarkFasttext():
                 "mem": f'{str(round(self.mem_usage[ext] / MB,2))} mb',
                 "accuracy": correct_predictions / total_predictions,
             }
-
-            summary_df = pd.DataFrame([d])
+            
             df.to_csv(f"data/predictions_fasttext_{ext}.csv", index = False)
-            summary_df.to_csv(f"data/benchmark_fasttext_{ext}.csv", index = False)
+            summary_df = pd.DataFrame([d])
+            summary_df_list.append(summary_df)
 
             logger.info(f'Benchmark for Fasttext {ext} ended ...')
-            logger.info(f'See benchmark_fasttext_{ext}.csv and predictions_fasttext_{ext}.csv files...')
+            logger.info(f'See predictions_fasttext_{ext}.csv files...')
+
+        return summary_df_list
