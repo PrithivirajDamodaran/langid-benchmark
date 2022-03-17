@@ -10,6 +10,8 @@ from language_dictionary import lang_dict
 from tqdm.auto import tqdm
 pd.set_option("max_colwidth", None)
 tqdm.pandas()
+from typing import List
+
 import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -37,16 +39,16 @@ class BenchmarkLangid():
               match = gt == pred      
               return pd.Series([pred, end, match])
 
-      def __call__(self):
+      def __call__(self) -> List[pd.DataFrame]:
           """ detects language for all the texts and calculates benchmark """
           logger.info('Benchmark for Langid started ...')
           MB = 1024 * 1024
-          langid_df = pd.read_csv("data/dataset.csv")  
-          langid_df['language'] = langid_df['language'].apply(lambda x:lang_dict[x])
-          langid_df[['pred_lang', 'time_taken', 'ismatch']] = langid_df.progress_apply(self._detect_language ,axis=1)
-          time_taken = langid_df["time_taken"].to_list()
-          correct_predictions = langid_df[langid_df['ismatch'] == True].shape[0]
-          total_predictions = langid_df.shape[0]
+          df = pd.read_csv("data/dataset.csv")  
+          df['language'] = df['language'].apply(lambda x:lang_dict[x])
+          df[['pred_lang', 'time_taken', 'ismatch']] = df.progress_apply(self._detect_language ,axis=1)
+          time_taken = df["time_taken"].to_list()
+          correct_predictions = df[df['ismatch'] == True].shape[0]
+          total_predictions = df.shape[0]
 
           d = {"algorithm": "Langid",
                "mean": np.mean(time_taken),
@@ -56,9 +58,11 @@ class BenchmarkLangid():
                "mem": str(round(self.mem_usage/ MB,2)) + " mb",
                "accuracy":correct_predictions/ total_predictions
                }
-            
-          summary_langid_df = pd.DataFrame([d]) 
-          langid_df.to_csv("data/predictions_langid.csv", index = False)
-          summary_langid_df.to_csv("data/benchmark_langid.csv", index = False)
+          
+          df.to_csv("data/predictions_langid.csv", index = False)
+          summary_df = pd.DataFrame([d]) 
+
           logger.info('Benchmark for Langid ended ...')
-          logger.info('See benchmark_langid.csv and predictions_langid.csv files...')
+          logger.info('See predictions_langid.csv files...')
+
+          return [summary_df]

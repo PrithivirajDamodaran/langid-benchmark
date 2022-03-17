@@ -1,4 +1,5 @@
 fasttext
+mdtable
 pandas
 py3langid
 requests
