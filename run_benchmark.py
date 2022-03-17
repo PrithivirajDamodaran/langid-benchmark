@@ -5,7 +5,6 @@ import logging.config
 from mdtable import MDTable
 import pandas as pd
 import sys
-pd.options.display.float_format = '{:.2f}'.format
 
 logging.config.dictConfig({
     'version': 1,
