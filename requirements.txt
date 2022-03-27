@@ -1,6 +1,10 @@
 fasttext
+gcld3
 mdtable
 pandas
+psutil
+pycld2
 py3langid
+regex
 requests
 tqdm
