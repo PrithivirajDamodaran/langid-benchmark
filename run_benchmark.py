@@ -22,6 +22,8 @@ logger.addHandler(stdout_handler)
 
 from benchmark_langid import BenchmarkLangid
 from benchmark_fasttext import BenchmarkFasttext
+from benchmark_cld3 import BenchmarkCLD3
+from benchmark_cld2 import BenchmarkCLD2
 ### ADD YOUR IMPLEMENTATIONS HERE ###
 
 
@@ -52,6 +54,12 @@ if __name__ == '__main__':
     if "Fasttext" in algorithm_list or "*" in algorithm_list:
         benchmark_fasttext = BenchmarkFasttext()
         summary_df_list.extend(benchmark_fasttext())
+    if "CLD3" in algorithm_list or "*" in algorithm_list:
+        benchmark_cld3 = BenchmarkCLD3()
+        summary_df_list.extend(benchmark_cld3())
+    if "CLD2" in algorithm_list or "*" in algorithm_list:
+        benchmark_cld2 = BenchmarkCLD2()
+        summary_df_list.extend(benchmark_cld2())
 
     summary_df = pd.concat(summary_df_list)
     summary_df.to_csv("data/benchmark_results.csv", index=False, float_format='%.4f')        
