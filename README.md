@@ -21,7 +21,7 @@ A benchmark of off-the-shelf models that detects language in text - Contribution
 - Please submit a PR so we can follow the review process.
 - Collaborators can serve as peer reviewers.
 
-### Results
+### Results - Run on a fresh GCP `e2-medium (2 vCPU;	4GB Memory)`
 | algorithm    | mean   | max    | min    | median | mem         | accuracy |
 | ------------ | ------ | ------ | ------ | ------ | ----------- | -------- |
 | Langid       | 0.0009 | 0.0047 | 0.0003 | 0.0008 | 9.54 mb     | 0.9543   |
