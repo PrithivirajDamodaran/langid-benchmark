@@ -74,7 +74,7 @@ if __name__ == '__main__':
     with open('README.md', 'r') as f:
         file_content = f.read()
 
-    new_file_content = file_content.split('### Results\n')[0] + '### Results\n' + markdown_string_table
+    new_file_content = file_content.split('- Result Table:\n\n')[0] + '- Result Table:\n\n' + markdown_string_table
 
     with open('README.md', 'w') as f:
         print(new_file_content, file=f)
